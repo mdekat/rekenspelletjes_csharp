@@ -41,7 +41,7 @@ jobs:
           dangerous-clean-slate: false
 
       # Stap 3: app_offline.htm verwijderen → site komt terug online
-      # if: always() zorgt dat dit ook bij een fout in stap 2 uitgevoerd wordt
+      # if: always() → ook uitvoeren als stap 2 faalt (site nooit permanent offline)
       - name: App weer online zetten
         if: always()
         env:
@@ -49,7 +49,32 @@ jobs:
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
-          curl --silent \
-               --user "${FTP_USERNAME}:${FTP_PASSWORD}" \
-               "ftp://${FTP_SERVER}/wwwroot/" \
-               -Q "DELE app_offline.htm" || true
+          python3 - <<'EOF'
+          import ftplib, os, sys
+
+          server   = os.environ["FTP_SERVER"]
+          username = os.environ["FTP_USERNAME"]
+          password = os.environ["FTP_PASSWORD"]
+
+          try:
+              ftp = ftplib.FTP()
+              ftp.connect(server)
+              ftp.login(username, password)
+
+              # Probeer meerdere paden (FTP-root verschilt per server)
+              for pad in ["wwwroot/app_offline.htm",
+                          "/wwwroot/app_offline.htm",
+                          "app_offline.htm"]:
+                  try:
+                      ftp.delete(pad)
+                      print(f"✅ app_offline.htm verwijderd via pad: {pad}")
+                      break
+                  except ftplib.error_perm:
+                      pass
+
+              ftp.quit()
+
+          except Exception as e:
+              print(f"⚠️  Kon app_offline.htm niet verwijderen: {e}", file=sys.stderr)
+              sys.exit(1)
+          EOF
