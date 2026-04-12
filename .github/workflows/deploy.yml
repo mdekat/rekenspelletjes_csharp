@@ -13,12 +13,43 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Deploy via FTP naar MonsterASP
+      # Stap 1: app_offline.htm uploaden → ASP.NET stopt de app en geeft DLL-locks vrij
+      - name: App offline zetten
+        env:
+          FTP_SERVER:   ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          echo "<h1>Even geduld, de site wordt bijgewerkt...</h1>" > /tmp/app_offline.htm
+          curl --silent --show-error --ftp-create-dirs \
+               --user "${FTP_USERNAME}:${FTP_PASSWORD}" \
+               -T /tmp/app_offline.htm \
+               "ftp://${FTP_SERVER}/wwwroot/app_offline.htm"
+          sleep 5
+
+      # Stap 2: alle bestanden uploaden (DLL's zijn nu vrij)
+      - name: Bestanden deployen via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server:     ${{ secrets.FTP_SERVER }}
           username:   ${{ secrets.FTP_USERNAME }}
           password:   ${{ secrets.FTP_PASSWORD }}
           server-dir: /wwwroot/
-          # Verwijder bestanden op de server die niet meer in de repo staan:
+          exclude: |
+            **/.git*
+            **/.git*/**
           dangerous-clean-slate: false
+
+      # Stap 3: app_offline.htm verwijderen → site komt terug online
+      # if: always() zorgt dat dit ook bij een fout in stap 2 uitgevoerd wordt
+      - name: App weer online zetten
+        if: always()
+        env:
+          FTP_SERVER:   ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          curl --silent \
+               --user "${FTP_USERNAME}:${FTP_PASSWORD}" \
+               "ftp://${FTP_SERVER}/wwwroot/" \
+               -Q "DELE app_offline.htm" || true
