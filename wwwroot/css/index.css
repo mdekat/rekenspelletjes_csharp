@@ -6,7 +6,7 @@
 
 body {
   font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', sans-serif;
-  background: linear-gradient(135deg, #ff6b35 0%, #f7c948 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
