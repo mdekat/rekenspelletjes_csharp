@@ -1,0 +1,540 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', sans-serif;
+  background: linear-gradient(135deg, #1a237e 0%, #283593 45%, #1565c0 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 40px;
+}
+
+h1 {
+  color: white;
+  font-size: 2.2em;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.35);
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+/* ── Terug-link ─────────────────────────────────────────────── */
+.back-link {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+  font-family: inherit;
+  font-size: 0.95em;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.back-link:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Taal-selectie ──────────────────────────────────────────── */
+.taal-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 16px 0 20px;
+}
+
+.taal-btn {
+  background: rgba(255, 255, 255, 0.22);
+  color: white;
+  font-family: inherit;
+  font-size: 1.05em;
+  font-weight: bold;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  padding: 10px 22px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, border-color 0.15s;
+}
+
+.taal-btn:hover {
+  background: rgba(255, 255, 255, 0.38);
+  transform: scale(1.06);
+}
+
+.taal-btn.active {
+  background: white;
+  color: #1a237e;
+  border-color: white;
+}
+
+/* ── Score-balk ─────────────────────────────────────────────── */
+.score-bar {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  width: 360px;
+  max-width: 100%;
+  margin-bottom: 14px;
+  color: white;
+  font-size: 1em;
+  font-weight: bold;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.score-item span {
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 10px;
+  padding: 3px 12px;
+  display: inline-block;
+}
+
+/* ── Voortgangsbalk ─────────────────────────────────────────── */
+.progress-wrap {
+  width: 360px;
+  max-width: 100%;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  height: 14px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #ffeb3b, #fff176);
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+/* ── Spelbox ────────────────────────────────────────────────── */
+.game-box {
+  background: white;
+  border-radius: 28px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  padding: 28px 24px 24px;
+  width: 360px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.taal-label {
+  font-size: 1em;
+  color: #888;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* ── Woord-display (flashcard) ──────────────────────────────── */
+.woord-display {
+  width: 100%;
+  border-radius: 20px;
+  padding: 28px 16px;
+  text-align: center;
+  font-size: 3em;
+  font-weight: bold;
+  letter-spacing: 2px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.1s;
+  animation: kaartIn 0.3s ease;
+  border: 4px solid transparent;
+}
+
+.woord-display:hover {
+  transform: scale(1.03);
+}
+
+.woord-display:active {
+  transform: scale(0.97);
+}
+
+/* Kleur per taal */
+.woord-display.taal-fr {
+  background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
+  color: #1a237e;
+  border-color: #3f51b5;
+}
+
+.woord-display.taal-en {
+  background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+  color: #880e4f;
+  border-color: #e91e63;
+}
+
+.woord-display.taal-de {
+  background: linear-gradient(135deg, #fff9c4 0%, #fff176 100%);
+  color: #5d3a00;
+  border-color: #f9a825;
+}
+
+@keyframes kaartIn {
+  0%   { transform: scale(0.75) rotateY(20deg); opacity: 0.3; }
+  60%  { transform: scale(1.05) rotateY(-3deg); opacity: 1; }
+  100% { transform: scale(1) rotateY(0deg); }
+}
+
+/* ── Uitspraak-hint ─────────────────────────────────────────── */
+.uitspraak-hint {
+  font-size: 0.8em;
+  color: #aaa;
+  margin-top: -8px;
+}
+
+/* ── Antwoord-grid (1–10) ───────────────────────────────────── */
+.answers-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.answer-btn {
+  font-family: inherit;
+  font-size: 1.5em;
+  font-weight: bold;
+  aspect-ratio: 1;
+  border-radius: 14px;
+  border: 3px solid #e0e0e0;
+  background: #f5f5f5;
+  color: #333;
+  cursor: pointer;
+  transition: transform 0.12s, background 0.15s, border-color 0.15s;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  padding: 0;
+}
+
+.answer-btn:hover:not(:disabled) {
+  transform: scale(1.1);
+  background: #e8eaf6;
+  border-color: #3f51b5;
+  color: #1a237e;
+}
+
+.answer-btn:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.answer-btn.goed {
+  background: #c8e6c9;
+  border-color: #43a047;
+  color: #1b5e20;
+  animation: btnBounce 0.35s ease;
+}
+
+.answer-btn.fout {
+  background: #ffcdd2;
+  border-color: #e53935;
+  color: #7f0000;
+  animation: btnSchud 0.4s ease;
+}
+
+.answer-btn.hint {
+  background: #fff9c4;
+  border-color: #f9a825;
+  color: #5d3a00;
+  transform: scale(1.12);
+  box-shadow: 0 0 0 3px rgba(249, 168, 37, 0.5);
+}
+
+@keyframes btnBounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.18); }
+  70%  { transform: scale(0.94); }
+  100% { transform: scale(1); }
+}
+
+@keyframes btnSchud {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-7px); }
+  40%       { transform: translateX(7px); }
+  60%       { transform: translateX(-5px); }
+  80%       { transform: translateX(5px); }
+}
+
+/* ── Feedback ───────────────────────────────────────────────── */
+.feedback {
+  font-size: 1.2em;
+  font-weight: bold;
+  min-height: 1.4em;
+  text-align: center;
+}
+
+.feedback.goed { color: #2e7d32; }
+.feedback.fout { color: #c62828; }
+
+/* ── Beloning overlay ───────────────────────────────────────── */
+.reward-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 100;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.reward-overlay.show {
+  display: flex;
+}
+
+.reward-box {
+  background: white;
+  border-radius: 32px;
+  padding: 36px 44px;
+  text-align: center;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  animation: overlayIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  max-width: 90vw;
+  border-top: 8px solid #3f51b5;
+}
+
+.reward-box.taal-fr { border-top-color: #002395; }
+.reward-box.taal-en { border-top-color: #C8102E; }
+.reward-box.taal-de { border-top-color: #FFCE00; }
+
+@keyframes overlayIn {
+  0%   { transform: scale(0.5) translateY(40px); opacity: 0; }
+  70%  { transform: scale(1.05) translateY(-4px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); }
+}
+
+/* Groot vlag-emoji in de overlay */
+.flag-display {
+  font-size: 5.5em;
+  display: block;
+  margin-bottom: 6px;
+  line-height: 1;
+  animation: vlagEntree 0.85s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  transform-origin: center bottom;
+}
+
+.flag-display.zwaai {
+  animation: vlagZwaaien 1.6s ease-in-out infinite;
+}
+
+@keyframes vlagEntree {
+  0%   { transform: scale(0) rotate(-30deg); opacity: 0; }
+  45%  { transform: scale(1.4) rotate(8deg);  opacity: 1; }
+  65%  { transform: scale(0.88) rotate(-4deg); }
+  82%  { transform: scale(1.08) rotate(3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes vlagZwaaien {
+  0%   { transform: rotate(-6deg) scale(1); }
+  50%  { transform: rotate(6deg)  scale(1.06); }
+  100% { transform: rotate(-6deg) scale(1); }
+}
+
+.reward-box .star-row {
+  font-size: 2em;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+}
+
+.reward-box h2 {
+  font-size: 2em;
+  color: #1a237e;
+  margin-bottom: 8px;
+}
+
+.reward-box p {
+  font-size: 1.1em;
+  color: #555;
+  margin-bottom: 22px;
+  line-height: 1.5;
+}
+
+.reward-box.taal-en h2 { color: #880e4f; }
+.reward-box.taal-de h2 { color: #5d3a00; }
+
+.go-btn {
+  background: linear-gradient(135deg, #56ab2f, #a8e063);
+  color: white;
+  font-family: inherit;
+  font-size: 1.15em;
+  font-weight: bold;
+  padding: 13px 34px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s;
+}
+
+.go-btn:active {
+  transform: scale(0.95);
+}
+
+/* ── Modus-toggle ───────────────────────────────────────────── */
+.modus-bar {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 0 0 20px;
+}
+
+.modus-btn {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.75);
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: bold;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 20px;
+  padding: 9px 24px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.1s;
+}
+
+.modus-btn:hover {
+  background: rgba(255, 255, 255, 0.28);
+  color: white;
+}
+
+.modus-btn.active {
+  background: white;
+  color: #1a237e;
+  border-color: white;
+}
+
+/* ── Oefenmodus ─────────────────────────────────────────────── */
+.oefen-box {
+  width: 360px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.oefen-intro {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.oefen-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.oefen-kaart {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 4px 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.12s, box-shadow 0.12s;
+  border: 3px solid transparent;
+  gap: 3px;
+}
+
+.oefen-kaart:hover {
+  transform: translateY(-3px) scale(1.06);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+}
+
+.oefen-kaart:active,
+.oefen-kaart.spreekt {
+  transform: scale(0.93);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.oefen-kaart.taal-fr { border-color: #3f51b5; }
+.oefen-kaart.taal-en { border-color: #e91e63; }
+.oefen-kaart.taal-de { border-color: #f9a825; }
+
+.oefen-cijfer {
+  font-size: 1.6em;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.oefen-kaart.taal-fr .oefen-cijfer { color: #1a237e; }
+.oefen-kaart.taal-en .oefen-cijfer { color: #880e4f; }
+.oefen-kaart.taal-de .oefen-cijfer { color: #5d3a00; }
+
+.oefen-woord {
+  font-size: 0.72em;
+  font-weight: bold;
+  text-align: center;
+  word-break: break-word;
+  line-height: 1.2;
+}
+
+.oefen-kaart.taal-fr .oefen-woord { color: #3f51b5; }
+.oefen-kaart.taal-en .oefen-woord { color: #e91e63; }
+.oefen-kaart.taal-de .oefen-woord { color: #f9a825; }
+
+.oefen-speaker {
+  font-size: 0.75em;
+  color: #bbb;
+  line-height: 1;
+}
+
+/* ── Spelmodus wrapper ──────────────────────────────────────── */
+.spel-sectie {
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.spel-sectie.actief {
+  display: flex;
+}
+
+/* ── Tablet / iPad (601–1024px) ─────────────────────────────── */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .game-box      { width: 420px; }
+  .progress-wrap { width: 420px; }
+  .score-bar     { width: 420px; }
+  .oefen-box     { width: 420px; }
+  .oefen-cijfer  { font-size: 1.8em; }
+  .oefen-woord   { font-size: 0.78em; }
+}
+
+/* ── Smartphone (≤ 600px) ───────────────────────────────────── */
+@media (max-width: 600px) {
+  body           { padding: 12px 10px 32px; }
+  h1             { font-size: 1.7em; }
+  .back-link     { position: static; align-self: flex-start; font-size: 0.9em; padding: 7px 14px; margin-bottom: 6px; }
+  .taal-bar      { gap: 6px; }
+  .taal-btn      { font-size: 0.88em; padding: 8px 14px; }
+  .modus-btn     { font-size: 0.88em; padding: 8px 18px; }
+  .score-bar     { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; gap: 6px; font-size: 0.85em; text-align: center; }
+  .progress-wrap { width: 100%; }
+  .game-box      { padding: 18px 12px 18px; gap: 12px; }
+  .woord-display { font-size: 2.2em; padding: 22px 12px; }
+  .answer-btn    { font-size: 1.25em; border-radius: 10px; }
+  .reward-box    { padding: 28px 22px; }
+  .reward-box h2 { font-size: 1.6em; }
+  .flag-display  { font-size: 4em; }
+  .oefen-box     { width: 100%; }
+  .oefen-grid    { gap: 7px; }
+  .oefen-kaart   { padding: 8px 2px 6px; border-radius: 12px; }
+  .oefen-cijfer  { font-size: 1.35em; }
+  .oefen-woord   { font-size: 0.65em; }
+}

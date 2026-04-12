@@ -1,0 +1,175 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', sans-serif;
+  background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 40px;
+}
+
+h1 {
+  color: white;
+  font-size: 2em;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.back-link {
+  position: absolute; top: 18px; left: 18px;
+  background: rgba(255,255,255,0.3); color: white;
+  font-family: inherit; font-size: 0.95em; font-weight: bold;
+  padding: 8px 16px; border-radius: 12px; text-decoration: none;
+  transition: background 0.15s;
+}
+.back-link:hover { background: rgba(255,255,255,0.5); }
+
+/* Getal keuze */
+.getal-label {
+  color: white; font-weight: bold; font-size: 1em;
+  margin-bottom: 6px; text-align: center;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+.getal-bar {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  justify-content: center;
+  max-width: min(380px, 95vw);
+  margin-bottom: 14px;
+}
+.getal-btn {
+  background: rgba(255,255,255,0.3); color: white;
+  font-family: inherit; font-size: 1em; font-weight: bold;
+  border: 2px solid rgba(255,255,255,0.5); border-radius: 10px;
+  padding: 6px 10px; cursor: pointer; min-width: 36px;
+  transition: background 0.15s, transform 0.1s;
+}
+.getal-btn:hover { background: rgba(255,255,255,0.5); transform: scale(1.08); }
+.getal-btn.active { background: white; color: #134e5e; border-color: white; }
+
+/* Info bar */
+.info-bar {
+  display: flex; gap: 14px; align-items: center;
+  flex-wrap: wrap; justify-content: center;
+  margin-bottom: 14px;
+}
+.info-label { color: white; font-weight: bold; font-size: 1.05em; text-shadow: 1px 1px 4px rgba(0,0,0,0.3); }
+.doelgetal-badge {
+  background: #ffd200; color: #333;
+  font-size: 1.7em; font-weight: bold;
+  padding: 5px 20px; border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  min-width: 56px; text-align: center;
+}
+.levens-badge {
+  background: rgba(255,255,255,0.3); color: white;
+  font-size: 1.4em; font-weight: bold;
+  padding: 5px 14px; border-radius: 12px;
+  letter-spacing: 2px;
+}
+
+/* Maze */
+.maze-wrap {
+  background: #2d5a1b;
+  border-radius: 10px;
+  padding: 4px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  line-height: 0;
+  margin-bottom: 16px;
+}
+
+#mazeTable {
+  border-collapse: collapse;
+  width: min(360px, 92vw);
+  table-layout: fixed;
+}
+
+td.cel {
+  height: calc(min(360px, 92vw) / 9);
+  text-align: center; vertical-align: middle;
+  cursor: pointer;
+  background: #f0f4e8;
+  font-weight: bold;
+  color: #2d3a1b;
+  user-select: none;
+  font-size: clamp(9px, 2.5vw, 13px);
+  border: 2px solid #b8cca8;
+  transition: background 0.08s;
+  line-height: 1.15;
+  padding: 1px;
+}
+
+td.cel:hover { filter: brightness(0.93); }
+
+td.cel.start-cel  { background: #a5d6a7; border-color: #43a047; color: #1b5e20; }
+td.cel.finish-cel { background: #fff59d; border-color: #f9a825; color: #5d4037; }
+td.cel.huidig     { background: #ffd200 !important; color: #333 !important; border-color: #e6b800 !important; }
+td.cel.bezocht    { background: #c8e6c9; border-color: #81c784; }
+
+@keyframes foutFlits {
+  0%   { background: #ef5350; color: white; }
+  100% { background: #f0f4e8; color: #2d3a1b; }
+}
+@keyframes foutFlitsBezocht {
+  0%   { background: #ef5350; color: white; }
+  100% { background: #c8e6c9; color: #2d3a1b; }
+}
+td.cel.fout-flits         { animation: foutFlits 0.5s ease-out forwards; }
+td.cel.bezocht.fout-flits { animation: foutFlitsBezocht 0.5s ease-out forwards; }
+
+/* Buttons */
+.nieuw-btn {
+  background: linear-gradient(135deg, #56ab2f, #a8e063);
+  color: white; font-family: inherit;
+  font-size: 1.1em; font-weight: bold;
+  padding: 12px 32px; border: none; border-radius: 16px;
+  cursor: pointer; box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  transition: transform 0.1s;
+}
+.nieuw-btn:active { transform: scale(0.95); }
+
+/* Overlays */
+.overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5); z-index: 100;
+  flex-direction: column; align-items: center; justify-content: center;
+}
+.overlay.show { display: flex; }
+
+.overlay-box {
+  background: white; border-radius: 28px;
+  padding: 40px 48px; text-align: center;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+  animation: popIn 0.4s ease;
+  max-width: 90vw;
+}
+.overlay-box .icoon-row { font-size: 2.8em; letter-spacing: 4px; margin-bottom: 12px; }
+.overlay-box h2 { font-size: 2em; margin-bottom: 8px; }
+.overlay-box p  { font-size: 1.1em; color: #555; margin-bottom: 24px; }
+.overlay-box .go-btn {
+  background: linear-gradient(135deg, #56ab2f, #a8e063);
+  color: white; font-family: inherit; font-size: 1.2em; font-weight: bold;
+  padding: 14px 36px; border: none; border-radius: 16px; cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2); transition: transform 0.1s;
+}
+.overlay-box .go-btn:active { transform: scale(0.95); }
+#winOverlay       .overlay-box h2 { color: #134e5e; }
+#afgelopenOverlay .overlay-box h2 { color: #c62828; }
+#afgelopenOverlay .overlay-box .go-btn { background: linear-gradient(135deg, #e53935, #ff7043); }
+
+@keyframes popIn {
+  0%   { transform: scale(0.7); opacity: 0.4; }
+  70%  { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  body { padding: 12px 10px 32px; }
+  h1 { font-size: 1.6em; }
+  .back-link { position: static; align-self: flex-start; font-size: 0.9em; padding: 7px 14px; margin-bottom: 6px; }
+  .overlay-box { padding: 28px 20px; }
+  .overlay-box h2 { font-size: 1.6em; }
+  .getal-btn { font-size: 0.9em; padding: 5px 8px; min-width: 32px; }
+}
