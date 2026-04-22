@@ -87,14 +87,17 @@ function nieuweVraag() {
 function genereerOpties(juist, max, s) {
   const set = new Set([juist]);
   let p = 0;
-  while (set.size < 4 && p++ < 200) {
-    const delta = (Math.floor(Math.random() * 4) + 1) * s * (Math.random() < 0.5 ? 1 : -1);
+  while (set.size < 4 && p++ < 300) {
+    const delta = (Math.floor(Math.random() * 5) + 1) * s * (Math.random() < 0.5 ? 1 : -1);
     const k = juist + delta;
-    if (k >= 1 && k <= max && k !== juist && !set.has(k)) set.add(k);
+    if (k >= s && k <= max && !set.has(k)) set.add(k);
   }
+  // Fallback: altijd veelvouden van s pakken
   while (set.size < 4) {
-    const k = randomInt(Math.max(1, juist - 3 * s), Math.min(max, juist + 3 * s));
-    if (!set.has(k)) set.add(k);
+    const k = s > 1
+      ? randomInt(1, Math.floor(max / s)) * s
+      : randomInt(Math.max(1, juist - 5), Math.min(max, juist + 5));
+    if (!set.has(k) && k >= 1 && k <= max) set.add(k);
   }
   return shuffle([...set]);
 }
