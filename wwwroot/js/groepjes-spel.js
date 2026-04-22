@@ -1,4 +1,5 @@
 let niveau = 10;
+let stap = 1;   // 1 = alle getallen, 5 = veelvouden van 5, 10 = veelvouden van 10
 let modus = 'blokken';
 let goed = 0, fout = 0, reeks = 0;
 const reeksDoelwit = 10;
@@ -6,10 +7,12 @@ let juisteAntwoord = 0;
 let bezig = false;
 let vorigeSleutel = '';
 
-function setLevel(n) {
+function setLevel(n, s) {
   niveau = n;
+  stap = s;
   document.querySelectorAll('.level-btn').forEach(b =>
-    b.classList.toggle('active', b.textContent === 'Tot ' + n));
+    b.classList.toggle('active',
+      parseInt(b.dataset.niveau) === n && parseInt(b.dataset.stap) === s));
   goed = 0; fout = 0; reeks = 0;
   updateScore();
   nieuweVraag();
@@ -31,14 +34,12 @@ function updateScore() {
 
 function genereerBord() {
   let n;
-  if (niveau <= 20) {
+  if (stap === 1) {
     n = randomInt(1, niveau);
-  } else if (niveau <= 50) {
-    n = randomInt(1, Math.floor(niveau / 5)) * 5;
   } else {
-    n = randomInt(1, Math.floor(niveau / 10)) * 10;
+    n = randomInt(1, Math.floor(niveau / stap)) * stap;
   }
-  if (n === 0) n = niveau <= 50 ? 5 : 10;
+  if (n === 0) n = stap;
   return {
     sleutel: 'bord-' + n,
     antwoord: n,
@@ -69,7 +70,7 @@ function nieuweVraag() {
   document.getElementById('visualisatie').innerHTML = '';
   document.getElementById('visualisatie').appendChild(vraag.render());
 
-  const opties = genereerOpties(juisteAntwoord, niveau, niveau > 50 ? 10 : 5);
+  const opties = genereerOpties(juisteAntwoord, niveau, Math.max(stap, 1));
   const grid = document.getElementById('answersGrid');
   grid.innerHTML = '';
   grid.style.pointerEvents = 'none';
@@ -83,16 +84,16 @@ function nieuweVraag() {
   setTimeout(() => { grid.style.pointerEvents = ''; }, 0);
 }
 
-function genereerOpties(juist, max, stap = 5) {
+function genereerOpties(juist, max, s) {
   const set = new Set([juist]);
   let p = 0;
   while (set.size < 4 && p++ < 200) {
-    const delta = (Math.floor(Math.random() * 4) + 1) * stap * (Math.random() < 0.5 ? 1 : -1);
+    const delta = (Math.floor(Math.random() * 4) + 1) * s * (Math.random() < 0.5 ? 1 : -1);
     const k = juist + delta;
     if (k >= 1 && k <= max && k !== juist && !set.has(k)) set.add(k);
   }
   while (set.size < 4) {
-    const k = randomInt(Math.max(1, juist - 10), Math.min(max, juist + 10));
+    const k = randomInt(Math.max(1, juist - 3 * s), Math.min(max, juist + 3 * s));
     if (!set.has(k)) set.add(k);
   }
   return shuffle([...set]);
