@@ -1,6 +1,8 @@
 let target = 10, pendingTarget = 10, cols = 4, rows = 4;
 let tiles = [], selectedIndex = null;
 let foundPairs = 0, totalPairs = 0, wrongMoves = 0;
+let levens = 3;
+const maxLevens = 3;
 let msgTimeout = null;
 let images = ['animals2_square.jpg', 'animals_square.jpg', 'bear_square.jpg', 'cubs_square.jpg', 'eenhoorn1.jpg', 'eenhoorn2_square.jpg', 'eenhoorn3_square.jpg', 'eenhoorn4_square.jpg', 'eenhoorn5_square.jpg', 'einhorn-und-regenbogen_square.jpg', 'elfje2.jpg', 'elfje_square.jpg', 'kittens2_square.jpg', 'kittens_square.jpg', 'owls_square.jpg', 'rainbow_square.jpg'];
 
@@ -29,8 +31,10 @@ function startGame() {
   selectedIndex = null;
   foundPairs = 0;
   wrongMoves = 0;
+  levens = maxLevens;
   totalPairs = Math.floor((cols * rows) / 2);
   updateScore();
+  updateHarten();
   setMessage('Klik op het eerste getal!', 'info');
   renderTiles();
 }
@@ -110,11 +114,27 @@ function clickTile(i) {
       }
     } else {
       wrongMoves++;
+      levens--;
       flashWrong(si, i);
       updateScore();
-      setMessage(first.value + ' + ' + second.value + ' = ' + (first.value + second.value) + '. Probeer opnieuw!', 'bad');
-      clearTimeout(msgTimeout);
-      msgTimeout = setTimeout(() => setMessage('Klik op het eerste getal!', 'info'), 2000);
+      updateHarten();
+      if (levens <= 0) {
+        setMessage('Helaas! Nieuwe getallenparen...', 'bad');
+        clearTimeout(msgTimeout);
+        msgTimeout = setTimeout(() => {
+          levens = maxLevens;
+          generateTiles();
+          selectedIndex = null;
+          renderTiles();
+          updateScore();
+          updateHarten();
+          setMessage('Klik op het eerste getal!', 'info');
+        }, 1400);
+      } else {
+        setMessage(first.value + ' + ' + second.value + ' = ' + (first.value + second.value) + '. Probeer opnieuw!', 'bad');
+        clearTimeout(msgTimeout);
+        msgTimeout = setTimeout(() => setMessage('Klik op het eerste getal!', 'info'), 2000);
+      }
     }
   }
 }
@@ -125,6 +145,13 @@ function flashWrong(i1, i2) {
   if (td[i1]) td[i1].classList.add('wrong');
   if (td[i2]) td[i2].classList.add('wrong');
   setTimeout(() => renderTiles(), 600);
+}
+
+function updateHarten() {
+  for (let i = 0; i < maxLevens; i++) {
+    const hart = document.getElementById('hart' + i);
+    if (hart) hart.className = 'hart' + (i < levens ? '' : ' leeg');
+  }
 }
 
 function updateScore() {

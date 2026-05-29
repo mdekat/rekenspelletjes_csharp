@@ -1,4 +1,4 @@
-const PUZZEL_AFBEELDINGEN = [
+﻿const PUZZEL_AFBEELDINGEN = [
   '/img/vierkant/eenhoorn2_square.jpg',
   '/img/vierkant/eenhoorn3_square.jpg',
   '/img/vierkant/eenhoorn4_square.jpg',
@@ -44,6 +44,7 @@ let bezig = false;
 let vorigeSom = '';
 let huidigeAfbeelding = '';
 let verwijderdeVakjes = [];
+let foutHuidigeSom = 0;
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -143,6 +144,7 @@ function nieuwPlaatje() {
 
 function nieuweVraag() {
   bezig = false;
+  foutHuidigeSom = 0;
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'feedback';
 
@@ -212,17 +214,24 @@ function kiesAntwoord(btn, waarde) {
   } else {
     btn.classList.add('fout');
     fout++;
+    foutHuidigeSom++;
     const el = document.getElementById('feedback');
-    el.textContent = FEEDBACK_FOUT[Math.floor(Math.random() * FEEDBACK_FOUT.length)];
     el.className = 'feedback fout';
     updateScore();
-    setTimeout(() => {
-      btn.classList.remove('fout');
-      alleKnoppen.forEach(b => b.disabled = false);
-      bezig = false;
-    }, 700);
+    if (foutHuidigeSom >= 2) {
+      el.textContent = 'Volgende som...';
+      setTimeout(() => nieuweVraag(), 1100);
+    } else {
+      el.textContent = FEEDBACK_FOUT[Math.floor(Math.random() * FEEDBACK_FOUT.length)];
+      setTimeout(() => {
+        btn.classList.remove('fout');
+        alleKnoppen.forEach(b => b.disabled = false);
+        bezig = false;
+      }, 700);
+    }
   }
 }
 
 initialiseerPuzzel();
 nieuweVraag();
+
