@@ -11,13 +11,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 30px 20px;
+  padding: 30px 20px 48px;
 }
 
 h1 {
   color: white;
   font-size: 2.6em;
-  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
   margin-bottom: 8px;
   text-align: center;
 }
@@ -29,19 +29,45 @@ h1 {
   text-align: center;
 }
 
+/* ── SECTIES ── */
+.pagina-inhoud {
+  width: 100%;
+  max-width: 940px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.sectie {
+  width: 100%;
+}
+
+.sectie-titel {
+  display: inline-block;
+  color: white;
+  font-size: 1.35em;
+  font-weight: bold;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+  background: rgba(255,255,255,0.18);
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 20px;
+  padding: 7px 22px;
+  margin-bottom: 18px;
+  letter-spacing: 0.5px;
+}
+
 .games-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
-  justify-content: center;
-  max-width: 900px;
-  width: 100%;
+  justify-content: flex-start;
 }
 
+/* ── KAARTEN ── */
 .game-card {
   background: white;
   border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   width: 260px;
   overflow: hidden;
   text-decoration: none;
@@ -52,11 +78,15 @@ h1 {
 
 .game-card:hover {
   transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 28px 70px rgba(0,0,0,0.35);
 }
 
 .game-card:active {
   transform: scale(0.97);
+}
+
+.card-image-wrap {
+  position: relative;
 }
 
 .card-image {
@@ -64,6 +94,17 @@ h1 {
   height: 180px;
   object-fit: cover;
   display: block;
+}
+
+.puzzel-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.45));
+  pointer-events: none;
 }
 
 .card-body {
@@ -97,7 +138,7 @@ h1 {
   padding: 10px 24px;
   border-radius: 12px;
   border: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   cursor: pointer;
   transition: transform 0.1s;
 }
@@ -106,16 +147,20 @@ h1 {
   transform: scale(0.95);
 }
 
-/* Tablet / iPad (601–1024px) */
+/* Tablet (601–1024px) */
 @media (max-width: 1024px) {
+  .pagina-inhoud { max-width: 720px; }
   .game-card { width: 220px; }
 }
 
 /* Smartphone (≤ 600px) */
 @media (max-width: 600px) {
-  body { padding: 20px 12px; }
+  body { padding: 20px 12px 40px; }
   h1 { font-size: 2em; }
-  .games-grid { gap: 16px; }
+  .subtitle { margin-bottom: 28px; }
+  .pagina-inhoud { gap: 32px; }
+  .sectie-titel { font-size: 1.15em; padding: 6px 16px; }
+  .games-grid { gap: 16px; justify-content: center; }
   .game-card { width: 100%; max-width: 360px; }
   .card-image { height: 160px; }
 }
