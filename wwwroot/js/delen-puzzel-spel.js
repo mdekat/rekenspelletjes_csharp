@@ -162,7 +162,7 @@ function nieuweVraag() {
   do {
     a = randomInt(1, maxA);
     juisteAntwoord = a;
-    somTekst = `${a * delerVan} Ã· ${delerVan}`;
+    somTekst = `${a * delerVan} ÷ ${delerVan}`;
   } while (somTekst === vorigeSom && maxA > 1);
   vorigeSom = somTekst;
 

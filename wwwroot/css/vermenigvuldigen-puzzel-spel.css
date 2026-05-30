@@ -46,7 +46,7 @@ h1 {
   margin: 16px 0 24px;
 }
 
-.level-btn {
+.level-btn, .tafel-btn, .max-btn {
   background: rgba(255,255,255,0.35);
   color: white;
   font-family: inherit;
@@ -54,12 +54,12 @@ h1 {
   font-weight: bold;
   border: 3px solid rgba(255,255,255,0.6);
   border-radius: 14px;
-  padding: 8px 20px;
+  padding: 8px 14px;
   cursor: pointer;
   transition: background 0.15s, transform 0.1s;
 }
-.level-btn:hover { background: rgba(255,255,255,0.55); transform: scale(1.06); }
-.level-btn.active { background: white; color: #0d5f79; border-color: white; }
+.level-btn:hover, .tafel-btn:hover, .max-btn:hover { background: rgba(255,255,255,0.55); transform: scale(1.06); }
+.level-btn.active, .tafel-btn.active, .max-btn.active { background: white; color: #0d5f79; border-color: white; }
 
 .score-bar {
   display: flex;
@@ -280,7 +280,7 @@ h1 {
   h1 { font-size: 1.7em; }
   .back-link { position: static; align-self: flex-start; font-size: 0.9em; padding: 7px 14px; margin-bottom: 6px; }
   .level-bar { display: grid; grid-template-columns: repeat(5, 1fr); width: 100%; gap: 6px; margin: 8px 0 16px; }
-  .level-btn { padding: 8px 4px; font-size: 0.85em; }
+  .level-btn, .tafel-btn, .max-btn { padding: 8px 4px; font-size: 0.85em; }
   .score-bar { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; gap: 6px; font-size: 0.85em; text-align: center; margin-bottom: 18px; }
   .game-box { padding: 18px 14px 20px; gap: 18px; }
   .puzzle-wrap { width: 228px; height: 228px; }
