@@ -4,7 +4,6 @@ let foundPairs = 0, totalPairs = 0, wrongMoves = 0;
 let levens = 3;
 const maxLevens = 3;
 let msgTimeout = null;
-let images = ['animals2_square.jpg', 'animals_square.jpg', 'bear_square.jpg', 'cubs_square.jpg', 'eenhoorn1.jpg', 'eenhoorn2_square.jpg', 'eenhoorn3_square.jpg', 'eenhoorn4_square.jpg', 'eenhoorn5_square.jpg', 'einhorn-und-regenbogen_square.jpg', 'elfje2.jpg', 'elfje_square.jpg', 'kittens2_square.jpg', 'kittens_square.jpg', 'owls_square.jpg', 'rainbow_square.jpg'];
 
 function setTarget(n, btn) {
   pendingTarget = n;
@@ -24,8 +23,8 @@ function startGame() {
   document.getElementById('targetNumber').textContent = target;
   document.getElementById('tileGrid').className = 'grid cols-' + cols;
 
-  const randomImage = images[Math.floor(Math.random() * images.length)];
-  document.getElementById('tileGrid').style.backgroundImage = 'url(../img/vierkant/' + randomImage + ')';
+  const randomImage = AFBEELDINGEN_BIBLIOTHEEK[Math.floor(Math.random() * AFBEELDINGEN_BIBLIOTHEEK.length)];
+  document.getElementById('tileGrid').style.backgroundImage = 'url(' + randomImage + ')';
 
   generateTiles();
   selectedIndex = null;

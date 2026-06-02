@@ -1,20 +1,4 @@
-const PUZZEL_AFBEELDINGEN = [
-  '/img/vierkant/eenhoorn2_square.jpg',
-  '/img/vierkant/eenhoorn3_square.jpg',
-  '/img/vierkant/eenhoorn4_square.jpg',
-  '/img/vierkant/eenhoorn5_square.jpg',
-  '/img/vierkant/bear_square.jpg',
-  '/img/vierkant/animals_square.jpg',
-  '/img/vierkant/animals2_square.jpg',
-  '/img/vierkant/kittens_square.jpg',
-  '/img/vierkant/kittens2_square.jpg',
-  '/img/vierkant/cubs_square.jpg',
-  '/img/vierkant/owls_square.jpg',
-  '/img/vierkant/rainbow_square.jpg',
-  '/img/vierkant/elfje_square.jpg',
-  '/img/vierkant/einhorn-und-regenbogen_square.jpg',
-  '/img/vierkant/eenhoorn1.jpg',
-];
+﻿const PUZZEL_AFBEELDINGEN = AFBEELDINGEN_BIBLIOTHEEK;
 
 const PUZZEL_KLAAR_BERICHTEN = [
   'Goed zo! Je hebt het plaatje vrijgespeeld!',
@@ -111,7 +95,7 @@ function verwijderStukje() {
   const square = document.querySelector(`.puzzle-square[data-index="${keuze}"]`);
   if (square) {
     square.classList.add('verdwijn');
-    // Niet uit DOM verwijderen — tegel onzichtbaar maken zodat positie behouden blijft
+    // Niet uit DOM verwijderen â€” tegel onzichtbaar maken zodat positie behouden blijft
     square.addEventListener('animationend', () => {
       square.classList.remove('verdwijn');
       square.style.visibility = 'hidden';
@@ -231,3 +215,4 @@ function kiesAntwoord(btn, waarde) {
 
 initialiseerPuzzel();
 nieuweVraag();
+

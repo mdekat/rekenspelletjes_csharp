@@ -1,25 +1,4 @@
-﻿const PUZZEL_AFBEELDINGEN = [
-  '/img/vierkant/eenhoorn2_square.jpg',
-  '/img/vierkant/eenhoorn3_square.jpg',
-  '/img/vierkant/eenhoorn4_square.jpg',
-  '/img/vierkant/eenhoorn5_square.jpg',
-  '/img/vierkant/bear_square.jpg',
-  '/img/vierkant/animals_square.jpg',
-  '/img/vierkant/animals2_square.jpg',
-  '/img/vierkant/kittens_square.jpg',
-  '/img/vierkant/kittens2_square.jpg',
-  '/img/vierkant/cubs_square.jpg',
-  '/img/vierkant/owls_square.jpg',
-  '/img/vierkant/rainbow_square.jpg',
-  '/img/vierkant/elfje_square.jpg',
-  '/img/vierkant/einhorn-und-regenbogen_square.jpg',
-  '/img/vierkant/eenhoorn1.jpg',
-  '/img/vierkant/elfje2.jpg',
-  '/img/vierkant/meisje1.png',
-  '/img/vierkant/meisje2.png',
-  '/img/vierkant/meisje3.png',
-  '/img/vierkant/meisje4.png',
-];
+﻿const PUZZEL_AFBEELDINGEN = AFBEELDINGEN_BIBLIOTHEEK;
 
 const PUZZEL_KLAAR_BERICHTEN = [
   'Goed zo! Je hebt het plaatje vrijgespeeld!',
@@ -234,4 +213,5 @@ function kiesAntwoord(btn, waarde) {
 
 initialiseerPuzzel();
 nieuweVraag();
+
 
